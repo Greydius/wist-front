@@ -1,32 +1,73 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <Loading v-if="isAuthLoading" />
+    <template v-else>
+      <DefaultLayout v-if="isAuthorized">
+      <!-- <DefaultLayout v-if="true"> -->
+        <router-view></router-view>
+      </DefaultLayout>
+      <LoginPage v-else />
+    </template>
+    
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { createNamespacedHelpers } from 'vuex'
+import Loading from './components/Loading'
 
-#nav {
-  padding: 30px;
+const { mapGetters: mapAuthGetters, mapMutations: mapAuthMutations, mapActions: mapAuthActions } = createNamespacedHelpers('auth')
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+const DefaultLayout = () => import(/* webpackChunkName: "default-layout" */ './views/layouts/DefaultLayout')
+const LoginPage = () => import(/* webpackChunkName: "login-page" */ './views/pages/LoginPage')
 
-    &.router-link-exact-active {
-      color: #42b983;
+export default {
+  name: 'App',
+  components: {
+    Loading,
+    DefaultLayout, LoginPage
+  },
+  data() {
+    return {
+      isAuthLoading: true,
     }
+  },
+  methods: {
+    ...mapAuthMutations({
+      setAuth: 'SET_AUTH'
+    }),
+    ...mapAuthActions({
+      'checkAuth': 'fakeRefresh'
+    })
+  },
+
+  computed: {
+    ...mapAuthGetters([
+      'isAuthorized'
+    ])
+  },
+
+
+  mounted() {
+    this.setAuth()
+    this.checkAuth()
+      .catch(() => {
+        
+      })
+      .finally(() => {
+        this.isAuthLoading = false
+      })
   }
+}
+</script>
+
+<style lang="scss" scoped>
+#app {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>

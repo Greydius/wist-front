@@ -1,0 +1,1 @@
+export default (uri) => `${process.env.VUE_APP_API_URL}/storage/${uri}`
