@@ -14,27 +14,51 @@ const routes = [
     alias: '/'
   },
   {
+    path: '/classroom/add',
+    name: 'classroom-add',
+    component: () => import(/* webpackChunkName: "classroom" */ './views/pages/Classroom'),
+    meta: {
+      title: 'Добавить Класс'
+    },
+  },
+  {
     path: '/classroom/:id',
     name: 'classroom',
-    component: () => import(/* webpackChunkName: "classroom" */ './views/pages/Classroom'),
+    component: () => import(/* webpackChunkName: "classroom-students" */ './views/pages/ClassroomStudents'),
     meta: {
       title: 'Класс'
     },
   },
   {
+    path: '/classroom/:id/edit',
+    name: 'classroom-edit',
+    component: () => import(/* webpackChunkName: "classroom" */ './views/pages/Classroom'),
+    meta: {
+      title: 'Изменить Класс'
+    },
+  },
+  {
     path: '/students',
     name: 'students',
-    component: () => import(/* webpackChunkName: "students" */ './views/pages/Classrooms'),
+    component: () => import(/* webpackChunkName: "students" */ './views/pages/Students'),
     meta: {
-      title: 'Студенты'
+      title: 'Ученики'
+    },
+  },
+  {
+    path: '/student/add',
+    name: 'student-add',
+    component: () => import(/* webpackChunkName: "student" */ './views/pages/Student'),
+    meta: {
+      title: 'Добавить Ученика'
     },
   },
   {
     path: '/student/:id',
     name: 'student',
-    component: () => import(/* webpackChunkName: "student" */ './views/pages/Classrooms'),
+    component: () => import(/* webpackChunkName: "student" */ './views/pages/Student'),
     meta: {
-      title: 'Студент'
+      title: 'Изменить Ученика'
     },
   },
 ]

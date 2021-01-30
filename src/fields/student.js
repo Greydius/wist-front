@@ -5,21 +5,24 @@ export const applicationStatuses = {
 }
 
 export const assessmentStatuses = {
+  unset: 'Не выполнено',
   done: 'Заполнен',
   reports: 'Отчёт',
   // date => Date
 }
 
 export const contractStatuses = {
-  done: 'Заполнен',
+  ungiven: 'Не выдан',
   given: 'Выдан',
+  done: 'Заполнен',
   cancelled: 'Отменен'
 }
 
 export const paymentStatuses = {
-  cancelled: 'Отменен',
+  unpaid: 'Не оплачен',
   paid: 'Оплачено',
-  'paid-partly': 'Частично оплачено'
+  'paid-partly': 'Частично оплачено',
+  cancelled: 'Отменен',
 }
 
 export const studentColumns = [
@@ -37,6 +40,15 @@ export const studentColumns = [
     key: 'name',
     filter: {
       type: 'input'
+    }
+  },
+  {
+    title: 'Класс',
+    dataIndex: 'actual_classroom',
+    key: 'actual_classroom',
+    scopedSlots: { customRender: 'actualClassroom' },
+    filter: {
+      type: 'selectClassroom',
     }
   },
   {

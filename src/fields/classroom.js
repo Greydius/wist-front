@@ -5,8 +5,8 @@ export default [
     key: 'id',
   },
   {
-    title: 'Год',
-    dataIndex: 'start_year',
+    title: 'Начало учебного года',
+    dataIndex: 'year',
     key: 'year',
   },
   {
@@ -18,10 +18,5 @@ export default [
     title: 'Статус',
     key: 'status',
     scopedSlots: { customRender: 'status' },
-  },
-  {
-    title: 'Действия',
-    key: 'actions',
-    scopedSlots: { customRender: 'actions' },
   }
 ]

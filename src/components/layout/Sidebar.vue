@@ -41,7 +41,7 @@ export default {
         },
         {
           route: 'students',
-          title: 'Студенты',
+          title: 'Ученики',
           icon: 'solution'
         },
       ]
