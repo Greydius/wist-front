@@ -1,7 +1,7 @@
 export const applicationStatuses = {
   unfilled: 'Не заполнен',
   filled: 'Заполнен',
-  'filled-onlne': 'Заполнен онлайн'
+  'filled-online': 'Заполнен онлайн'
 }
 
 export const assessmentStatuses = {
@@ -117,9 +117,6 @@ export const studentColumns = [
     title: 'Начало школы',
     dataIndex: 'school_start_date',
     key: 'school_start_date',
-    filter: {
-      type: 'date'
-    }
   },
   {
     title: 'Payment',

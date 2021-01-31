@@ -54,6 +54,14 @@ const routes = [
     },
   },
   {
+    path: '/student/:id/classrooms/:student_classroom_id',
+    name: 'student-classroom',
+    component: () => import(/* webpackChunkName: "student-classroom" */ './views/pages/StudentClassroom'),
+    meta: {
+      title: 'Класс ученика'
+    },
+  },
+  {
     path: '/student/:id',
     name: 'student',
     component: () => import(/* webpackChunkName: "student" */ './views/pages/Student'),

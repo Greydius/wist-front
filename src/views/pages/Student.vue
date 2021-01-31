@@ -107,14 +107,14 @@
       </a-row>
     </a-form>
 
-    <div class="table">
+    <div class="table" v-if="type === 'update'">
       <a-page-header
         title="Классы"
         sub-title="Описание"
         class="page-student__header"
       >
         <template slot="extra">
-          <a-button type="primary">
+          <a-button @click="addClassroom" type="primary">
             Добавить класс
           </a-button>
         </template>
@@ -123,16 +123,26 @@
         rowKey="id"
         :columns="classroomColumns"
         :data-source="data.classrooms"
-        :loading="isLoading"
         bordered
       >
         <span slot="name" slot-scope="text, { grade, symbol }">{{ grade + symbol }}</span>
         <span slot="status" slot-scope="text, { students_count, limit }">{{ `${students_count}/${limit}` }}</span>
-        <span slot="actions">
-          <a-button type="primary">Редактировать</a-button>
+        <span slot="actions" slot-scope="text, record">
+          <router-link :to="{ name: 'student-classroom', params: { id: $route.params.id, student_classroom_id: record.pivot.id } }">
+            <a-button type="default">Оплаты</a-button>
+          </router-link>
+          <a-button @click="() => editClassroom(record)" type="primary" style="margin-left: 15px">Редактировать</a-button>
+          <a-button @click="() => deleteClassroom(record.id)" type="danger" style="margin-left: 15px">Удалить</a-button>
         </span>
       </a-table>
     </div>
+    <StudentClassroomModal
+      v-if="isStudentClassroomModalOpen"
+      :type="studentClassroomModalData.type"
+      :content="studentClassroomModalData.content"
+      :student_id="studentClassroomModalData.student_id"
+      @close="closeStudentClassroomModal"
+    />
   </div>
 </template>
 
@@ -140,6 +150,7 @@
 import apiRequest from '../../utils/apiRequest'
 
 import { PageHeader, Form, Row, Col, InputNumber, Select, DatePicker, Divider, Table } from 'ant-design-vue'
+import StudentClassroomModal from '../../components/StudentClassroomModal'
 
 import { studentColumns, applicationStatuses, assessmentStatuses, contractStatuses, paymentStatuses } from '../../fields/student'
 
@@ -161,11 +172,20 @@ export default {
     'a-select-option': Select.Option,
     'a-date-picker': DatePicker,
     'a-divider': Divider,
-    'a-table': Table
+    'a-table': Table,
+    StudentClassroomModal
   },
 
   data() {
     return {
+      isStudentClassroomModalOpen: false,
+      studentClassroomModalData: {
+        type: 'add',
+        content: {
+
+        },
+        student_id: this.$route.params.id
+      },
       isDataLoading: true,
       form: this.$form.createForm(this, { name: 'advanced_search' }),
       columns: studentColumns,
@@ -199,18 +219,7 @@ export default {
     if(this.type === 'add') {
       this.isDataLoading = false
     } else {
-      apiRequest.get(`/students/${this.$route.params.id}`, {
-        params: {
-          with_classrooms: true
-        }
-      })
-        .then(response => {
-          const { data } = response.data
-          this.data = data
-        })
-        .finally(() => {
-          this.isDataLoading = false
-        })
+      this.getStudent()
     }
     
   },
@@ -231,7 +240,20 @@ export default {
   },
 
   methods: {
-
+    getStudent() {
+      apiRequest.get(`/students/${this.$route.params.id}`, {
+        params: {
+          with_classrooms: true
+        }
+      })
+        .then(response => {
+          const { data } = response.data
+          this.data = data
+        })
+        .finally(() => {
+          this.isDataLoading = false
+        })
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((error, values) => {
@@ -264,6 +286,30 @@ export default {
       this.form.setFieldsValue({
         [key]: value.format('DD.MM.YYYY')
       })
+    },
+
+    editClassroom(classroom) {
+      this.studentClassroomModalData.type = 'edit'
+      this.studentClassroomModalData.content = classroom
+      this.isStudentClassroomModalOpen = true
+    },
+
+    addClassroom() {
+      this.studentClassroomModalData.type = 'add'
+      this.studentClassroomModalData.content = {}
+      this.isStudentClassroomModalOpen = true
+    },
+
+    closeStudentClassroomModal() {
+      this.isStudentClassroomModalOpen = false
+      this.getStudent()
+    },
+
+    deleteClassroom(classroom_id) {
+      apiRequest.delete(`/students/${this.$route.params.id}/classrooms/${classroom_id}`)
+        .then(() => {
+          this.getStudent()
+        })
     }
   }
 }

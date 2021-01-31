@@ -150,6 +150,7 @@
             <router-link :to="{ name: 'student', params: { id: record.id } }">
               <a-button type="primary">Перейти</a-button>
             </router-link>
+            <a-button @click="() => deleteStudent(record.id)" type="danger" style="margin-left: 15px">Удалить</a-button>
           </span>
         </a-table>
       </div>
@@ -234,6 +235,14 @@ export default {
         .then(({ data }) => {
           this.data = data.data
           this.isLoading = false
+        })
+        .catch((error) => console.log(error))
+    },
+
+    deleteStudent(id) {
+      apiRequest.delete(`/students/${id}`)
+        .then(() => {
+          this.getStudents()
         })
         .catch((error) => console.log(error))
     },

@@ -187,7 +187,7 @@ export default {
             const { data } = response.data
             this.data = data
 
-            this.$router.push({ name: 'classroom-edit', params: { id: data.id } })
+            this.$router.push({ name: 'classrooms' })
           })
           .finally(() => {
             this.isDataLoading = false
