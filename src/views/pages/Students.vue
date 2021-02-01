@@ -141,16 +141,40 @@
       </div>
       <div class="table">
         <a-table rowKey="id" :columns="columns" :data-source="data" bordered>
-          <span slot="actualClassroom" slot-scope="text">{{ actualClassroom(text) }}</span>
-          <span slot="application" slot-scope="text">{{ applicationStatuses[text] }}</span>
-          <span slot="assessment" slot-scope="text">{{ assessmentFiled(text) }}</span>
-          <span slot="contract" slot-scope="text">{{ contractStatuses[text] }}</span>
-          <span slot="payment" slot-scope="text">{{ paymentStatuses[text] }}</span>
+          <template
+            v-for="col in ['name']"
+            slot="name"
+            slot-scope="text, record"
+          >
+            <editable-input-cell type="input" :key="col" :text="text" @change="onCellChange(record.id, col, $event)" />
+          </template>
+          <template
+            v-for="col in ['birthdate', 'visit_date', 'application_date', 'assessment_date']"
+            :slot="col"
+            slot-scope="text, record"
+          >
+            <editable-input-cell type="date" :key="col" :text="text" @change="onCellChange(record.id, col, $event)" />
+          </template>
+          <span slot="actualClassroom" slot-scope="text">
+            {{ actualClassroom(text) }}
+          </span>
+          <span slot="application" slot-scope="text, record">
+            <editable-select-cell :text="text" :variants="applicationStatuses" @change="onCellChange(record.id, 'application', $event)" />
+          </span>
+          <span slot="assessment" slot-scope="text, record">
+            <editable-select-with-date-cell :text="text" :variants="assessmentStatuses" @change="onCellChange(record.id, 'assessment', $event)" />
+          </span>
+          <span slot="contract" slot-scope="text, record">
+            <editable-select-cell :text="text" :variants="contractStatuses" @change="onCellChange(record.id, 'contract', $event)" />
+            </span>
+          <span slot="payment" slot-scope="text, record">
+            <editable-select-cell :text="text" :variants="paymentStatuses" @change="onCellChange(record.id, 'payment', $event)" />
+          </span>
           <span slot="actions" slot-scope="text, record">
-            <router-link :to="{ name: 'student', params: { id: record.id } }">
+            <router-link :to="{ name: 'student', params: { id: record.id } }" style="margin-left: 15px; margin-top: 15px;">
               <a-button type="primary">Перейти</a-button>
             </router-link>
-            <a-button @click="() => deleteStudent(record.id)" type="danger" style="margin-left: 15px">Удалить</a-button>
+            <a-button @click="() => deleteStudent(record.id)" type="danger" style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px">Удалить</a-button>
           </span>
         </a-table>
       </div>
@@ -164,6 +188,10 @@ import apiRequest from '../../utils/apiRequest'
 import { PageHeader, Table, Form, Row, Col, InputNumber, Select, DatePicker, Divider } from 'ant-design-vue'
 
 import { studentColumns, applicationStatuses, assessmentStatuses, contractStatuses, paymentStatuses } from '../../fields/student'
+
+import EditableInputCell from '../../components/EditableInputCell'
+import EditableSelectCell from '../../components/EditableSelectCell'
+import EditableSelectWithDateCell from '../../components/EditableSelectWithDateCell'
 
 export default {
   components: {
@@ -183,10 +211,14 @@ export default {
     'a-date-picker': DatePicker,
     'a-range-picker': DatePicker.RangePicker,
     'a-divider': Divider,
+    EditableInputCell,
+    EditableSelectCell,
+    EditableSelectWithDateCell
   },
 
   data() {
     return {
+      editingKey: '',
       isLoading: true,
       expand: false,
       form: this.$form.createForm(this, { name: 'advanced_search' }),
@@ -197,7 +229,8 @@ export default {
       },
       applicationStatuses,
       contractStatuses,
-      paymentStatuses
+      paymentStatuses,
+      assessmentStatuses
     }
   },
 
@@ -299,6 +332,18 @@ export default {
       this.form.setFieldsValue({
         [key]: values
       })
+    },
+
+    onCellChange(key, dataIndex, value) {
+      const dataSource = [...this.data];
+      const target = dataSource.find(item => item.id === key);
+      if (target) {
+        target[dataIndex] = value;
+        this.setStudent(target)
+      }
+    },
+    setStudent(studentData) {
+      apiRequest.put(`/students/${studentData.id}`, studentData)
     }
   }
 }

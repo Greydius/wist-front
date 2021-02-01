@@ -38,6 +38,7 @@ export const studentColumns = [
     title: 'Имя',
     dataIndex: 'name',
     key: 'name',
+    scopedSlots: { customRender: 'name' },
     filter: {
       type: 'input'
     }
@@ -55,6 +56,7 @@ export const studentColumns = [
     title: 'ДР',
     dataIndex: 'birthdate',
     key: 'birthdate',
+    scopedSlots: { customRender: 'birthdate' },
     filter: {
       type: 'date'
     }
@@ -63,6 +65,7 @@ export const studentColumns = [
     title: 'Визит',
     dataIndex: 'visit_date',
     key: 'visit_date',
+    scopedSlots: { customRender: 'visit_date' },
     filter: {
       type: 'date'
     }
@@ -81,6 +84,7 @@ export const studentColumns = [
     title: 'Application Date',
     dataIndex: 'application_date',
     key: 'application_date',
+    scopedSlots: { customRender: 'application_date' },
     filter: {
       type: 'date'
     }
@@ -99,6 +103,7 @@ export const studentColumns = [
     title: 'Assessment Date',
     dataIndex: 'assessment_date',
     key: 'assessment_date',
+    scopedSlots: { customRender: 'assessment_date' },
     filter: {
       type: 'date'
     }

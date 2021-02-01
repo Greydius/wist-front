@@ -6,63 +6,63 @@
       class="page-classroom__header"
       @back="() => $router.go(-1)"
     />
-      <a-form class="filters__form" :form="form" @submit="handleSubmit" v-if="!isDataLoading">
-        <a-row :gutter="24">
-          <a-col
-            v-for="({ title, key, filter: { type } }) in columns"
-            :key="key"
-            :span="6"
-          >
-            <a-form-item :label="title">
-              <a-input
-                v-if="type === 'input'"
-                v-decorator="[
-                  key,
-                  {
-                    rules: [{ required: true, message: 'Поле обязательно для заполнения!' }],
-                    initialValue: data[key]
-                  },
-                ]"
-                :placeholder="title"
-              />
-              <a-input-number
-                v-if="type === 'inputNumber'"
-                v-decorator="[
-                  key,
-                  {
-                    rules: [{ required: true, message: 'Поле обязательно для заполнения!' }],
-                    initialValue: data[key]
-                  },
-                ]"
-                :placeholder="title"
-                class="filters__input-number"
-              />
-              <a-select
-                v-if="type === 'selectSchoolYear'"
-                v-decorator="[
-                  key,
-                  {
-                    rules: [{ required: true, message: 'Поле обязательно для заполнения!' }],
-                    initialValue: data[key]
-                  },
-                ]"
-                :placeholder="title"
-              >
-                <a-select-option v-for="variant in filterDataSchoolYear" :key="variant.id">
-                  {{ variant.title }}
-                </a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row>
-          <a-col :span="24" :style="{ textAlign: 'left' }">
-            <a-button type="primary" html-type="submit">
-              {{ pagetitle }}
-            </a-button>
-          </a-col>
-        </a-row>
-      </a-form>
+    <a-form class="filters__form" :form="form" @submit="handleSubmit" v-if="!isDataLoading">
+      <a-row :gutter="24">
+        <a-col
+          v-for="({ title, key, filter: { type } }) in columns"
+          :key="key"
+          :span="6"
+        >
+          <a-form-item :label="title">
+            <a-input
+              v-if="type === 'input'"
+              v-decorator="[
+                key,
+                {
+                  rules: [{ required: true, message: 'Поле обязательно для заполнения!' }],
+                  initialValue: data[key]
+                },
+              ]"
+              :placeholder="title"
+            />
+            <a-input-number
+              v-if="type === 'inputNumber'"
+              v-decorator="[
+                key,
+                {
+                  rules: [{ required: true, message: 'Поле обязательно для заполнения!' }],
+                  initialValue: data[key]
+                },
+              ]"
+              :placeholder="title"
+              class="filters__input-number"
+            />
+            <a-select
+              v-if="type === 'selectSchoolYear'"
+              v-decorator="[
+                key,
+                {
+                  rules: [{ required: true, message: 'Поле обязательно для заполнения!' }],
+                  initialValue: data[key]
+                },
+              ]"
+              :placeholder="title"
+            >
+              <a-select-option v-for="variant in filterDataSchoolYear" :key="variant.id">
+                {{ variant.title }}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="24" :style="{ textAlign: 'left' }">
+          <a-button type="primary" html-type="submit">
+            {{ pagetitle }}
+          </a-button>
+        </a-col>
+      </a-row>
+    </a-form>
   </div>
 </template>
 
