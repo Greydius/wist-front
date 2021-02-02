@@ -155,7 +155,7 @@
           >
             <editable-input-cell type="date" :key="col" :text="text" @change="onCellChange(record.id, col, $event)" />
           </template>
-          <span slot="actualClassroom" slot-scope="text">
+          <span slot="actualClassroom" slot-scope="text, record" :title="getClassroomInfo(record.actual_classroom)">
             {{ actualClassroom(text) }}
           </span>
           <span slot="application" slot-scope="text, record">
@@ -172,9 +172,9 @@
           </span>
           <span slot="actions" slot-scope="text, record">
             <router-link :to="{ name: 'student', params: { id: record.id } }" style="margin-left: 15px; margin-top: 15px;">
-              <a-button type="primary">Перейти</a-button>
+              <a-icon type="arrow-right" />
             </router-link>
-            <a-button @click="() => deleteStudent(record.id)" type="danger" style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px">Удалить</a-button>
+            <a-icon @click="() => deleteStudent(record.id)" style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px" type="delete" />
           </span>
         </a-table>
       </div>
@@ -344,6 +344,14 @@ export default {
     },
     setStudent(studentData) {
       apiRequest.put(`/students/${studentData.id}`, studentData)
+    },
+
+    getClassroomInfo(classroom) {
+      if(classroom) {
+        const {students_count, limit, year} = classroom
+        return `${students_count}/${limit} - ${year}`
+      }
+      return ''
     }
   }
 }

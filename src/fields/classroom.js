@@ -5,17 +5,17 @@ export default [
     key: 'id',
   },
   {
-    title: 'Начало учебного года',
+    title: 'School start date',
     dataIndex: 'year',
     key: 'year',
   },
   {
-    title: 'Название',
+    title: 'Name',
     key: 'name',
     scopedSlots: { customRender: 'name' },
   },
   {
-    title: 'Статус',
+    title: 'Status',
     key: 'status',
     scopedSlots: { customRender: 'status' },
   }

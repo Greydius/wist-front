@@ -32,37 +32,43 @@ export const studentColumns = [
     key: 'id',
     filter: {
       type: 'inputNumber'
-    }
+    },
+    sorter: (a, b) => a.id - b.id,
   },
   {
-    title: 'Имя',
+    title: 'Name',
     dataIndex: 'name',
     key: 'name',
     scopedSlots: { customRender: 'name' },
     filter: {
       type: 'input'
-    }
+    },
+    sorter: (a, b) => {
+      if(a.name < b.name) { return -1; }
+      if(a.name > b.name) { return 1; }
+      return 0;
+    },
   },
   {
-    title: 'Класс',
+    title: 'Classroom',
     dataIndex: 'actual_classroom',
     key: 'actual_classroom',
     scopedSlots: { customRender: 'actualClassroom' },
     filter: {
       type: 'selectClassroom',
-    }
+    },
   },
   {
-    title: 'ДР',
+    title: 'BD',
     dataIndex: 'birthdate',
     key: 'birthdate',
     scopedSlots: { customRender: 'birthdate' },
     filter: {
       type: 'date'
-    }
+    },
   },
   {
-    title: 'Визит',
+    title: 'Visit',
     dataIndex: 'visit_date',
     key: 'visit_date',
     scopedSlots: { customRender: 'visit_date' },
@@ -109,7 +115,7 @@ export const studentColumns = [
     }
   },
   {
-    title: 'Контракт',
+    title: 'Contract',
     dataIndex: 'contract',
     scopedSlots: { customRender: 'contract' },
     key: 'contract',
@@ -119,7 +125,7 @@ export const studentColumns = [
     }
   },
   {
-    title: 'Начало школы',
+    title: 'School start date',
     dataIndex: 'school_start_date',
     key: 'school_start_date',
   },
@@ -134,7 +140,7 @@ export const studentColumns = [
     }
   },
   {
-    title: 'Действия',
+    title: 'Actions',
     key: 'actions',
     scopedSlots: { customRender: 'actions' },
   },

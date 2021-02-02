@@ -44,7 +44,12 @@
               v-decorator="[
                 key,
                 {
-                  rules: [{ required: true, message: 'Поле обязательно для заполнения!' }],
+                  rules: [
+                    { 
+                      required: key === 'birthdate',
+                      message: 'Поле обязательно для заполнения!'
+                    }
+                  ],
                   initialValue: data[key]
                 },
               ]"

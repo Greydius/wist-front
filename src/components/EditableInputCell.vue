@@ -63,6 +63,7 @@ export default {
 .editable-cell-input-wrapper,
 .editable-cell-text-wrapper {
   padding-right: 24px;
+  min-width: 101px;
 }
 
 .editable-cell-text-wrapper {
