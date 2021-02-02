@@ -137,7 +137,12 @@
             <a-button type="default">Оплаты</a-button>
           </router-link>
           <a-button @click="() => editClassroom(record)" type="primary" style="margin-left: 15px">Редактировать</a-button>
-          <a-button @click="() => deleteClassroom(record.id)" type="danger" style="margin-left: 15px">Удалить</a-button>
+          <a-popconfirm
+            title="Уверены?"
+            @confirm="() => deleteClassroom(record.id)"
+          >
+            <a-button type="danger" style="margin-left: 15px">Удалить</a-button>
+          </a-popconfirm>
         </span>
       </a-table>
     </div>
@@ -154,7 +159,7 @@
 <script>
 import apiRequest from '../../utils/apiRequest'
 
-import { PageHeader, Form, Row, Col, InputNumber, Select, DatePicker, Divider, Table } from 'ant-design-vue'
+import { PageHeader, Form, Row, Col, InputNumber, Select, DatePicker, Divider, Table, Popconfirm } from 'ant-design-vue'
 import StudentClassroomModal from '../../components/StudentClassroomModal'
 
 import { studentColumns, applicationStatuses, assessmentStatuses, contractStatuses, paymentStatuses } from '../../fields/student'
@@ -178,6 +183,7 @@ export default {
     'a-date-picker': DatePicker,
     'a-divider': Divider,
     'a-table': Table,
+    'a-popconfirm': Popconfirm,
     StudentClassroomModal
   },
 
@@ -235,7 +241,7 @@ export default {
     },
 
     filterableColumns() {
-      const guarded = ['id', 'actual_classroom', 'school_start_date']
+      const guarded = ['index', 'actual_classroom', 'school_start_date']
       return this.columns.filter(column => column.filter && !guarded.includes(column.key))
     },
 

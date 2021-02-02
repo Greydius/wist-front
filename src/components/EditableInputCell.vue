@@ -17,7 +17,12 @@
       />
     </div>
     <div v-else class="editable-cell-text-wrapper">
-      {{ value || ' ' }}
+      <router-link v-if="id" :to="{ name: 'student', params: { id: id } }">
+        {{ value || ' ' }}
+      </router-link>
+      <template v-else>
+        {{ value || ' ' }}
+      </template>
       <a-icon type="edit" class="editable-cell-icon" @click="edit" />
     </div>
   </div>
@@ -29,6 +34,10 @@ export default {
   props: {
     text: String,
     type: String,
+    id: {
+      type: [Number,null],
+      default: null
+    }
   },
   components: {
     'a-date-picker': DatePicker
@@ -80,19 +89,18 @@ export default {
 
 .editable-cell-icon {
   line-height: 18px;
-  display: none;
 }
 
 .editable-cell-icon-check {
   line-height: 28px;
 }
 
-.editable-cell:hover .editable-cell-icon {
+.editable-cell .editable-cell-icon {
   display: inline-block;
 }
 
-.editable-cell-icon:hover,
-.editable-cell-icon-check:hover {
+.editable-cell-icon,
+.editable-cell-icon-check {
   color: #108ee9;
 }
 

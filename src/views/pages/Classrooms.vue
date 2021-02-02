@@ -31,7 +31,12 @@
             <router-link :to="{ name: 'classroom', params: { id: record.id } }">
               <a-button type="primary">Перейти</a-button>
             </router-link>
-            <a-button @click="() => deleteClassroom(record.id)" type="danger" style="margin-left: 15px">Удалить</a-button>
+            <a-popconfirm
+              title="Уверены?"
+              @confirm="() => deleteClassroom(record.id)"
+            >
+              <a-button type="danger" style="margin-left: 15px">Удалить</a-button>
+            </a-popconfirm>
           </span>
         </a-table>
       </div>
@@ -41,14 +46,15 @@
 
 <script>
 import apiRequest from '../../utils/apiRequest'
-import { PageHeader, Table } from 'ant-design-vue'
+import { PageHeader, Table, Popconfirm } from 'ant-design-vue'
 
 import classroomColumns from '../../fields/classroom'
 
 export default {
   components: {
     'a-page-header': PageHeader,
-    'a-table': Table
+    'a-table': Table,
+    'a-popconfirm': Popconfirm
   },
 
   data() {

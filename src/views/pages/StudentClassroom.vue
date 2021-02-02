@@ -32,7 +32,12 @@
       >
         <span slot="actions" slot-scope="text, record">
           <a-button @click="() => editPayment(record)" type="primary" style="margin-left: 15px">Редактировать</a-button>
-          <a-button @click="() => deletePayment(record.id)" type="danger" style="margin-left: 15px">Удалить</a-button>
+          <a-popconfirm
+            title="Уверены?"
+            @confirm="() => deletePayment(record.id)"
+          >
+            <a-button type="danger" style="margin-left: 15px">Удалить</a-button>
+          </a-popconfirm>
         </span>
       </a-table>
     </div>
@@ -52,7 +57,7 @@
 <script>
 import apiRequest from '../../utils/apiRequest'
 
-import { PageHeader, Table } from 'ant-design-vue'
+import { PageHeader, Table, Popconfirm } from 'ant-design-vue'
 import StudentClassroomPaymentModal from '../../components/StudentClassroomPaymentModal'
 import StudentClassroomInvoiceModal from '../../components/StudentClassroomInvoiceModal'
 
@@ -60,6 +65,7 @@ export default {
   components: {
     'a-page-header': PageHeader,
     'a-table': Table,
+    'a-popconfirm': Popconfirm,
     StudentClassroomPaymentModal,
     StudentClassroomInvoiceModal
   },
@@ -156,8 +162,8 @@ export default {
       this.isStudentClassroomInvoiceModalOpen = false
     },
 
-    deleteClassroom(payment_id) {
-      apiRequest.delete(`/student-classroom/${this.$route.params.student_classroom_id}/payments/${payment_id}`)
+    deletePayment(payment_id) {
+      apiRequest.delete(`/student-classrooms/${this.$route.params.student_classroom_id}/payments/${payment_id}`)
         .then(() => {
           this.getStudentClassroom()
         })

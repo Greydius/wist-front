@@ -122,12 +122,15 @@
       </div>
       <div class="table">
         <a-table rowKey="id" :columns="classroomStudentsColumns" :data-source="data" bordered>
+          <span slot="index" slot-scope="text, record, index">
+            {{ index + 1 }}
+          </span>
           <template
             v-for="col in ['name']"
             slot="name"
             slot-scope="text, record"
           >
-            <editable-input-cell type="input" :key="col" :text="text" @change="onCellChange(record.id, col, $event)" />
+            <editable-input-cell type="input" :id="record.id" :key="col" :text="text" @change="onCellChange(record.id, col, $event)" />
           </template>
           <template
             v-for="col in ['birthdate', 'visit_date', 'application_date', 'assessment_date']"
@@ -136,8 +139,11 @@
           >
             <editable-input-cell type="date" :key="col" :text="text" @change="onCellChange(record.id, col, $event)" />
           </template>
-          <span slot="actualClassroom" slot-scope="text">
-            {{ actualClassroom(text) }}
+          <span slot="actualClassroom" slot-scope="text, record">
+            <router-link :to="{ name: 'classroom', params: { id: record.actual_classroom && record.actual_classroom.id } }">
+              {{ actualClassroom(text) }}
+            </router-link>
+            {{ getClassroomInfo(record.actual_classroom) }}
           </span>
           <span slot="application" slot-scope="text, record">
             <editable-select-cell :text="text" :variants="applicationStatuses" @change="onCellChange(record.id, 'application', $event)" />
@@ -152,10 +158,12 @@
             <editable-select-cell :text="text" :variants="paymentStatuses" @change="onCellChange(record.id, 'payment', $event)" />
           </span>
           <span slot="actions" slot-scope="text, record">
-            <router-link :to="{ name: 'student', params: { id: record.id } }" style="margin-left: 15px; margin-top: 15px;">
-              <a-icon type="arrow-right" />
-            </router-link>
-            <a-icon @click="() => deleteStudent(record.id)" style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px" type="delete" />
+            <a-popconfirm
+              title="Уверены?"
+              @confirm="() => deleteStudent(record.id)"
+            >
+              <a-icon  style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px" type="delete" />
+            </a-popconfirm>
           </span>
         </a-table>
       </div>
@@ -170,7 +178,7 @@
 <script>
 import apiRequest from '../../utils/apiRequest'
 
-import { PageHeader, Table, Form, Row, Col, InputNumber, Select, DatePicker, Divider } from 'ant-design-vue'
+import { PageHeader, Table, Form, Row, Col, InputNumber, Select, DatePicker, Divider, Popconfirm } from 'ant-design-vue'
 
 import { studentColumns, applicationStatuses, assessmentStatuses, contractStatuses, paymentStatuses } from '../../fields/student'
 
@@ -198,6 +206,7 @@ export default {
     'a-date-picker': DatePicker,
     'a-range-picker': DatePicker.RangePicker,
     'a-divider': Divider,
+    'a-popconfirm': Popconfirm,
     ClassroomInvoiceModal,
     EditableInputCell,
     EditableSelectCell,
@@ -326,6 +335,14 @@ export default {
     },
     setStudent(studentData) {
       apiRequest.put(`/students/${studentData.id}`, studentData)
+    },
+
+    getClassroomInfo(classroom) {
+      if(classroom) {
+        const {students_count, limit} = classroom
+        return `(${students_count}/${limit})`
+      }
+      return ''
     }
   }
 }

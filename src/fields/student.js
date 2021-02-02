@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const applicationStatuses = {
   unfilled: 'Не заполнен',
   filled: 'Заполнен',
@@ -27,9 +29,9 @@ export const paymentStatuses = {
 
 export const studentColumns = [
   {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
+    title: '№',
+    key: 'index',
+    scopedSlots: { customRender: 'index' },
     filter: {
       type: 'inputNumber'
     },
@@ -57,6 +59,14 @@ export const studentColumns = [
     filter: {
       type: 'selectClassroom',
     },
+    sorter: (a, b) => {
+      const a_actual_classroom = a.actual_classroom && a.actual_classroom.grade + a.actual_classroom.symbol || ''
+      const b_actual_classroom = b.actual_classroom && b.actual_classroom.grade + b.actual_classroom.symbol || ''
+
+      if(a_actual_classroom.length < b_actual_classroom.length) { return -1; }
+      if(a_actual_classroom.length > b_actual_classroom.length) { return 1; }
+      return 0;
+    }
   },
   {
     title: 'BD',
@@ -66,6 +76,11 @@ export const studentColumns = [
     filter: {
       type: 'date'
     },
+    sorter: (a, b) => {
+      if(moment(a.birthdatem) < moment(b.birthdate)) { return -1; }
+      if(moment(a.birthdate) > moment(b.birthdate)) { return 1; }
+      return 0;
+    },
   },
   {
     title: 'Visit',
@@ -74,6 +89,11 @@ export const studentColumns = [
     scopedSlots: { customRender: 'visit_date' },
     filter: {
       type: 'date'
+    },
+    sorter: (a, b) => {
+      if(moment(a.visit_date) < moment(b.visit_date)) { return -1; }
+      if(moment(a.visit_date) > moment(b.visit_date)) { return 1; }
+      return 0;
     }
   },
   {
@@ -84,6 +104,11 @@ export const studentColumns = [
     filter: {
       type: 'select',
       variants: applicationStatuses
+    },
+    sorter: (a, b) => {
+      if(a.application.length < b.application.length) { return -1; }
+      if(a.application.length > b.application.length) { return 1; }
+      return 0;
     }
   },
   {
@@ -93,6 +118,11 @@ export const studentColumns = [
     scopedSlots: { customRender: 'application_date' },
     filter: {
       type: 'date'
+    },
+    sorter: (a, b) => {
+      if(moment(a.application_date) < moment(b.application_date)) { return -1; }
+      if(moment(a.application_date) > moment(b.application_date)) { return 1; }
+      return 0;
     }
   },
   {
@@ -103,6 +133,11 @@ export const studentColumns = [
     filter: {
       type: 'selectWithDate',
       variants: assessmentStatuses
+    },
+    sorter: (a, b) => {
+      if(a.assessment.length < b.assessment.length) { return -1; }
+      if(a.assessment.length > b.assessment.length) { return 1; }
+      return 0;
     }
   },
   {
@@ -112,6 +147,11 @@ export const studentColumns = [
     scopedSlots: { customRender: 'assessment_date' },
     filter: {
       type: 'date'
+    },
+    sorter: (a, b) => {
+      if(moment(a.assessment_date) < moment(b.assessment_date)) { return -1; }
+      if(moment(a.assessment_date) > moment(b.assessment_date)) { return 1; }
+      return 0;
     }
   },
   {
@@ -122,6 +162,11 @@ export const studentColumns = [
     filter: {
       type: 'select',
       variants: contractStatuses
+    },
+    sorter: (a, b) => {
+      if(a.contract.length < b.contract.length) { return -1; }
+      if(a.contract.length > b.contract.length) { return 1; }
+      return 0;
     }
   },
   {
@@ -137,6 +182,11 @@ export const studentColumns = [
     filter: {
       type: 'select',
       variants: paymentStatuses
+    },
+    sorter: (a, b) => {
+      if(a.payment.length < b.payment.length) { return -1; }
+      if(a.payment.length > b.payment.length) { return 1; }
+      return 0;
     }
   },
   {

@@ -105,19 +105,18 @@ export default {
 
 .editable-cell-icon {
   line-height: 18px;
-  display: none;
 }
 
 .editable-cell-icon-check {
   line-height: 28px;
 }
 
-.editable-cell:hover .editable-cell-icon {
+.editable-cell .editable-cell-icon {
   display: inline-block;
 }
 
-.editable-cell-icon:hover,
-.editable-cell-icon-check:hover {
+.editable-cell-icon,
+.editable-cell-icon-check {
   color: #108ee9;
 }
 
