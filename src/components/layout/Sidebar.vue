@@ -12,8 +12,8 @@
         v-for="{route, title, icon} in menus"
         :key="route"
       >
-        <a-icon :type="icon" />
-        <span>{{ title }}</span>
+        <a-icon style="font-size: 18px;" :type="icon" />
+        <span style="font-size: 18px;">{{ title }}</span>
       </a-menu-item>
     </a-menu>
   </div>

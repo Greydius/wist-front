@@ -77,7 +77,7 @@ export const studentColumns = [
       type: 'date'
     },
     sorter: (a, b) => {
-      if(moment(a.birthdatem) < moment(b.birthdate)) { return -1; }
+      if(moment(a.birthdate) < moment(b.birthdate)) { return -1; }
       if(moment(a.birthdate) > moment(b.birthdate)) { return 1; }
       return 0;
     },

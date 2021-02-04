@@ -1,6 +1,6 @@
 <template>
   <a-layout class="layout layout-default">
-    <a-layout-sider v-model="collapsed" :trigger="null" collapsible style="background: #fff">
+    <a-layout-sider v-model="collapsed" :trigger="null" collapsible style="background: #fff" width="250">
       <Sidebar :collapsed="collapsed" />
     </a-layout-sider>
     <a-layout>

@@ -163,6 +163,7 @@
               {{ actualClassroom(text) }}
             </router-link>
             {{ getClassroomInfo(record.actual_classroom) }}
+            <a-icon v-if="record.actual_classroom" @click="openClassroomInvoiceModal(record.actual_classroom.id || false)" style="margin-left: 15px;" type="file-pdf" />
           </span>
           <span slot="application" slot-scope="text, record">
             <editable-select-cell :text="text" :variants="applicationStatuses" @change="onCellChange(record.id, 'application', $event)" />
@@ -183,10 +184,21 @@
             >
               <a-icon  style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px" type="delete" />
             </a-popconfirm>
+            <a-icon v-if="record.actual_classroom" @click="openStudentInvoiceModal(record.actual_classroom.pivot.id || false)" style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px" type="file-pdf" />
           </span>
         </a-table>
       </div>
     </div>
+    <ClassroomInvoiceModal
+      v-if="isClassroomInvoiceModalOpen"
+      :classroom_id="classroomInvoiceModalData.classroom_id"
+      @close="closeClassroomInvoiceModal"
+    />
+    <StudentClassroomInvoiceModal
+      v-if="isStudentClassroomInvoiceModalOpen"
+      :student_classroom_id="studentClassroomInvoiceModalData.student_classroom_id"
+      @close="closeStudentClassroomInvoiceModal"
+    />
   </div>
 </template>
 
@@ -196,6 +208,9 @@ import apiRequest from '../../utils/apiRequest'
 import { PageHeader, Table, Form, Row, Col, InputNumber, Select, DatePicker, Divider, Popconfirm } from 'ant-design-vue'
 
 import { studentColumns, applicationStatuses, assessmentStatuses, contractStatuses, paymentStatuses } from '../../fields/student'
+
+import ClassroomInvoiceModal from '../../components/ClassroomInvoiceModal'
+import StudentClassroomInvoiceModal from '../../components/StudentClassroomInvoiceModal'
 
 import EditableInputCell from '../../components/EditableInputCell'
 import EditableSelectCell from '../../components/EditableSelectCell'
@@ -222,7 +237,9 @@ export default {
     'a-popconfirm': Popconfirm,
     EditableInputCell,
     EditableSelectCell,
-    EditableSelectWithDateCell
+    EditableSelectWithDateCell,
+    StudentClassroomInvoiceModal,
+    ClassroomInvoiceModal
   },
 
   data() {
@@ -230,6 +247,14 @@ export default {
       editingKey: '',
       isLoading: true,
       expand: false,
+      isClassroomInvoiceModalOpen: false,
+      classroomInvoiceModalData: {
+        classroom_id: null,
+      },
+      isStudentClassroomInvoiceModalOpen: false,
+      studentClassroomInvoiceModalData: {
+        student_classroom_id: null,
+      },
       form: this.$form.createForm(this, { name: 'advanced_search' }),
       columns: studentColumns,
       data: [],
@@ -361,7 +386,24 @@ export default {
         return `(${students_count}/${limit})`
       }
       return ''
-    }
+    },
+    openStudentInvoiceModal(student_classroom_id) {
+      this.studentClassroomInvoiceModalData.student_classroom_id = student_classroom_id
+      this.isStudentClassroomInvoiceModalOpen = true
+    },
+
+    closeStudentClassroomInvoiceModal() {
+      this.isStudentClassroomInvoiceModalOpen = false
+    },
+
+    openClassroomInvoiceModal(classroom_id) {
+      this.classroomInvoiceModalData.classroom_id = classroom_id
+      this.isClassroomInvoiceModalOpen = true
+    },
+
+    closeClassroomInvoiceModal() {
+      this.isClassroomInvoiceModalOpen = false
+    },
   }
 }
 </script>

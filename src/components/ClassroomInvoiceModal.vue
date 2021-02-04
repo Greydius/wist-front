@@ -36,8 +36,10 @@
       </a-row>
     </a-form>
     <template v-if="trimesters && trimesters.length > 0">
-      <p v-for="student in students" :key="student.id">
-        <a :href="invoiceUrl(student.pivot.id)" target="_blank">{{ student.name }}</a>
+      <p v-for="student in students" :key="student.id" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>{{ student.name }}</span>
+        <span>-</span>
+        <a :href="invoiceUrl(student.pivot.id)" target="_blank">Скачать</a>
       </p>
     </template>
   </a-modal>
@@ -49,6 +51,9 @@ import apiRequest from '../utils/apiRequest'
 import { Modal, Form, Row, Col, Select } from 'ant-design-vue'
 
 export default {
+  props: {
+    classroom_id: [Number, null]
+  },
   components: {
     'a-modal': Modal,
     'a-form': Form,
@@ -88,7 +93,9 @@ export default {
 
   methods: {
     getStudents() {
-      apiRequest.get(`/classrooms/${this.$route.params.id}/students`)
+      const classroom_id = this.classroom_id ? this.classroom_id : this.$route.params.id
+
+      apiRequest.get(`/classrooms/${classroom_id}/students`)
         .then(response => {
           const { data } = response.data
           this.students = data
