@@ -162,8 +162,9 @@
               title="Уверены?"
               @confirm="() => deleteStudent(record.id)"
             >
-              <a-icon  style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px" type="delete" />
+              <a-icon style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px" type="delete" />
             </a-popconfirm>
+            <a-icon @click="openStudentInvoiceModal(record.actual_classroom.pivot.id)" style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px" type="file-pdf" />
           </span>
         </a-table>
       </div>
@@ -171,6 +172,12 @@
     <ClassroomInvoiceModal
       v-if="isClassroomInvoiceModalOpen"
       @close="closeClassroomInvoiceModal"
+    />
+    <StudentClassroomInvoiceModal
+      v-if="isStudentClassroomInvoiceModalOpen"
+      :student_classroom_id="studentClassroomInvoiceModalData.student_classroom_id"
+      @close="closeStudentClassroomInvoiceModal"
+
     />
   </div>
 </template>
@@ -183,6 +190,7 @@ import { PageHeader, Table, Form, Row, Col, InputNumber, Select, DatePicker, Div
 import { studentColumns, applicationStatuses, assessmentStatuses, contractStatuses, paymentStatuses } from '../../fields/student'
 
 import ClassroomInvoiceModal from '../../components/ClassroomInvoiceModal'
+import StudentClassroomInvoiceModal from '../../components/StudentClassroomInvoiceModal'
 
 import EditableInputCell from '../../components/EditableInputCell'
 import EditableSelectCell from '../../components/EditableSelectCell'
@@ -210,12 +218,17 @@ export default {
     ClassroomInvoiceModal,
     EditableInputCell,
     EditableSelectCell,
-    EditableSelectWithDateCell
+    EditableSelectWithDateCell,
+    StudentClassroomInvoiceModal
   },
 
   data() {
     return {
       isClassroomInvoiceModalOpen: false,
+      isStudentClassroomInvoiceModalOpen: false,
+      studentClassroomInvoiceModalData: {
+        student_classroom_id: null,
+      },
       isLoading: true,
       expand: false,
       form: this.$form.createForm(this, { name: 'advanced_search' }),
@@ -343,7 +356,16 @@ export default {
         return `(${students_count}/${limit})`
       }
       return ''
-    }
+    },
+
+    openStudentInvoiceModal(student_classroom_id) {
+      this.studentClassroomInvoiceModalData.student_classroom_id = student_classroom_id
+      this.isStudentClassroomInvoiceModalOpen = true
+    },
+
+    closeStudentClassroomInvoiceModal() {
+      this.isStudentClassroomInvoiceModalOpen = false
+    },
   }
 }
 </script>

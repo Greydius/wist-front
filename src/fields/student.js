@@ -32,9 +32,9 @@ export const studentColumns = [
     title: '№',
     key: 'index',
     scopedSlots: { customRender: 'index' },
-    filter: {
-      type: 'inputNumber'
-    },
+    // filter: {
+    //   type: 'inputNumber'
+    // },
     sorter: (a, b) => a.id - b.id,
   },
   {

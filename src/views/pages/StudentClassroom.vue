@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       isStudentClassroomPaymentModalOpen: false,
-       isStudentClassroomInvoiceModalOpen: false,
+      isStudentClassroomInvoiceModalOpen: false,
       studentClassroomPaymentModalData: {
         type: 'add',
         content: {

@@ -43,6 +43,9 @@
 import { Modal, Form, Row, Col, Select } from 'ant-design-vue'
 
 export default {
+  props: {
+    student_classroom_id: [Number, null]
+  },
   components: {
     'a-modal': Modal,
     'a-form': Form,
@@ -82,7 +85,9 @@ export default {
           return
         }
         const trimesters = values.trimesters.join('&trimesters[]=')
-        window.open(`${process.env.VUE_APP_API_URL}/api/student-classrooms/${this.$route.params.student_classroom_id}/invoice?trimesters[]=${trimesters}`, '_blank')
+        const student_classroom_id = this.student_classroom_id ? this.student_classroom_id : this.$route.params.student_classroom_id
+
+        window.open(`${process.env.VUE_APP_API_URL}/api/student-classrooms/${student_classroom_id}/invoice?trimesters[]=${trimesters}`, '_blank')
 
         this.handleCancel()
       });
